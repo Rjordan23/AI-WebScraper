@@ -30,13 +30,9 @@ def scrape_website(website, headless=True, max_duration=30):
             time.sleep(1)  # Wait a bit before checking again
 
         #Final check: did we exceed timeout?
-        if time.driverexecute_script("return document.readyState") 
-
-            # Check if the page is fully loaded (document.readyState === "complete")
-            if driver.execute_script("return document.readyState") == "complete":
-                break
-
-            time.sleep(5)  # Wait before checking again
+        if time.time() - start_time >= max_duration:
+            print("Scraping timed out.")
+            return "<!-- Scraping timed out -->"
 
         print(f"Successfully navigated to {website}")
         html = driver.page_source  # Capture the full HTML content

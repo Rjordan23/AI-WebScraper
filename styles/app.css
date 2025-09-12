@@ -1,0 +1,63 @@
+html, body, [class*="css"] {
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background: linear-gradient(to bottom right, #1e1e2f, #2c2c3c);
+    color: #f0f0f0;
+}
+
+details {
+    background-color: #2a2a3a !important;
+    border: 1px solid #444 !important;
+    padding: 10px;
+    color: #f0f0f0;
+}
+
+.stApp {
+    background: linear-gradient(to bottom right, #1e1e2f, #2c2c3c);
+    padding-bottom: 60px; /* Matches footer height */
+}
+
+textarea, input, .stTextInput, .stTextArea {
+    background-color: #2a2a3a !important;
+    color: #f0f0f0 !important;
+    border: 1px solid #444 !important;
+}
+
+.stButton>button {
+    background-color: #444 !important;
+    color: #f0f0f0 !important;
+    border-radius: 5px;
+}
+
+.stButton>button:hover {
+    background-color: #555 !important;
+    transition: background-color 0.3s ease;
+}
+
+.stMarkdown {
+    color: #f0f0f0;
+}
+
+.scrollable-div {
+    height:250px; 
+    overflow:auto; 
+    border:1px solid #ccc; 
+    padding:10px; 
+    background-color:#f9f9f9;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(to right, #1e1e2f, #2c2c3c);
+    color: #f0f0f0;
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+    border-top: 1px solid #444;
+    z-index: 9999;
+}

@@ -9,7 +9,21 @@ from scrape import (
 import time
 
 # Streamlit App Configuration
-st.set_page_config(page_title="AI Web Scraper", layout="wide")
+st.set_page_config(page_title="AI Web Scraper", layout="centered")
+
+# Load custom CSS
+with open("styles/app.css") as f:
+    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+# Initialize session state variables
+st.markdown(
+    """
+    <link rel="icon" href="https://ramseyjordan.site/favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+    """,
+    unsafe_allow_html=True
+)
+
 st.title("AI Web Scraper")
 tab1, tab2, tab3 = st.tabs(["🔍 Scrape", "📄 View Chunks", "🧠 Parse with AI"])
 
@@ -55,7 +69,7 @@ with tab1:
                     # Using st.code(result, language="html") to display raw HTML made a large slow page so I used st.markdown with a scrollable div instead
                     st.markdown(
                         f"""
-                        <div style="height:250px; overflow:auto; border:1px solid #ccc; padding:10px; background-color:#f9f9f9;">
+                        <div class="scrollable-div">
                             <pre>{result}</pre>
                         </div>
                         """,
@@ -98,3 +112,14 @@ with tab3:
                 # You can now pass dom_chunks to an AI model or parsing logic
             else:
                 st.warning("Please enter a description before parsing.")
+
+
+# Custom Footer
+st.markdown(
+    """
+    <div class="footer">
+        &copy; Ramsey Jordan 2025. All rights reserved.
+    </div>
+    """,
+    unsafe_allow_html=True
+)
