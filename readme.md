@@ -58,14 +58,32 @@ A modern, tabbed Streamlit app for scraping, chunking, and parsing website conte
 ## 📦 Setup
 
 ```bash
+# Clone the repository
 git clone https://github.com/yourusername/ai-web-scraper.git
 cd ai-web-scraper
-python -m venv venv
-source venv/bin/activate  # or venv\Scripts\activate on Windows
-pip install -r requirements.txt
-streamlit run main.py
 
-📁 File Structure
+# Create and activate a virtual environment
+# Requires Python 3.11+
+python -m venv venv           # Use python3 if needed
+source venv/bin/activate      # Mac/Linux
+venv\Scripts\activate         # Windows
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Optional: Install manually if requirements.txt is missing
+pip install streamlit selenium beautifulsoup4 validators
+
+# Launch the app
+streamlit run main.py         
+# Or use:
+python3 -m streamlit run main.py
+
+```
+---
+
+## 📁 File Structure
+
 ├── main.py              # Streamlit app logic
 ├── scrape.py            # Scraping and chunking functions
 ├── styles/
@@ -74,14 +92,23 @@ streamlit run main.py
 │   └── screenshot.png   # UI screenshot for README
 ├── requirements.txt
 
-🧠 Coming Soon: LLM Integration
+---
+
+## 🧠 Coming Soon: LLM Integration
+
 AI-powered parsing of chunked content
 Summarization, tagging, and structured extraction
 Persistent output across sessions
 Export options for parsed results
 
-📜 License
+---
+
+## 📜 License
+
 MIT License — feel free to fork, remix, and build on it.
 
-🙌 Acknowledgments
+---
+
+## 🙌 Acknowledgments
+
 Thanks to the open-source tools and libraries that make this possible. Stay tuned for LLM-powered parsing and more UX enhancements.
