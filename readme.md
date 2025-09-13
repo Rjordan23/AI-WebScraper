@@ -87,7 +87,8 @@ This app uses the Mistral model via Ollama. You must have Ollama installed and r
 
 ## 📊 Output Format
 
-![AI Web Parser Screenshot](assets/ai-web-parser-screenshot-2.png?raw=true "AI Web Scraper - Tabbed Interface with Dark Theme")
+![AI Web Parser Screenshot](assets/screenshot-2.png?raw=true "AI Web Scraper - Tabbed Interface with Dark Theme")
+
 Each chunk is parsed individually. Results are displayed live with:
 - Output Type	Display Method:
 - Valid Match	st.success() ✅
@@ -107,7 +108,8 @@ Strict instructions ensure clean output:
 
 ## 🧹 Cleanup & Resilience
 
-![Real Time Terminal Output](assets/ai-web-parser-screenshot-3.png?raw=true "AI Web Scraper - Tabbed Interface with Dark Theme")
+![Real Time Terminal Output](assets/screenshot-3.png?raw=true "AI Web Scraper - Tabbed Interface with Dark Theme")
+
 - Retry logic with timeout
 - Fallback messages for empty/error chunks
 - Scroll-to-results for smooth UX
