@@ -7,6 +7,7 @@ from scrape import (
     clean_body_content
 )
 import time
+from parse import parse_with_ollama 
 
 # Streamlit App Configuration
 st.set_page_config(page_title="AI Web Scraper", layout="centered")
@@ -58,7 +59,17 @@ with tab1:
 
                     # Store cleaned content and prepare for pagination
                     st.session_state.dom_content = cleaned_content
-                    st.session_state.dom_chunks = split_dom_content(cleaned_content)
+                    chunks = split_dom_content(cleaned_content, max_length=1000)
+
+                    # Store chunks with metadata
+                    st.session_state.dom_chunks = [
+                        {
+                            "source_url": url,
+                            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%S"),
+                            "dom_content": chunk
+                        }
+                        for chunk in chunks
+                    ]
                     st.session_state.page_index = 0 #Start on the first page
 
                     with st.expander("View Cleaned Body Content"):
@@ -85,7 +96,7 @@ with tab2:
         st.markdown(f"### Parsed Content - Page {page_index + 1} of {total_pages}")
         st.text_area(
         label="Chunked Content",
-        value=st.session_state.dom_chunks[page_index],
+        value=st.session_state.dom_chunks[page_index]["dom_content"],
         height=300
         )
 
@@ -99,20 +110,85 @@ with tab2:
 
 # Parsing Section
 with tab3:
-    if 'dom_content' in st.session_state:
+    st.header("🧠 AI Web Parser")
+
+    if 'dom_chunks' in st.session_state:
         parse_description = st.text_area(
-        "Enter a description of what to parse from the content:",
-        height=100
+            "Enter a description of what to parse from the content:",
+            height=100,
+            value="The page title from the HTML"
         )
 
         if st.button("Parse Content"):
             if parse_description:
-                st.write("Parsing DOM content...")
-                dom_chunks = split_dom_content(st.session_state.dom_content)
-                # You can now pass dom_chunks to an AI model or parsing logic
+                with st.spinner("⏳ Parsing in progress... This may take a few minutes. Thank you for your patience!"):
+                    progress_bar = st.progress(0)
+                    total_chunks = len(st.session_state.dom_chunks)
+                    parsed_results = []
+                    
+                    for i, chunk_data in enumerate(st.session_state.dom_chunks, start=1):
+                        result = parse_with_ollama([chunk_data], parse_description)[0]
+                        parsed_results.append(result)
+                        progress_bar.progress(i / total_chunks)
+
+                        # 🔍 Show result immediately with divider
+                        st.markdown(f"**Chunk {i} — Source:** {result['source_url']}")
+                        output = result["parsed_output"]
+
+                        if "[Error" in output:
+                            st.error(output)
+                        elif "[No matching" in output:
+                            st.info(output)
+                        else:
+                            st.success(output)
+
+                        st.markdown("---")  # Divider between chunks
+
+                    st.session_state.parsed_results = parsed_results
+
+                st.success("✅ Parsing completed!")
+
+                # Summary Metrics
+                total_chunks = len(parsed_results)
+                successful_parses = sum(1 for r in parsed_results if "[No matching" not in r["parsed_output"] and "[Error" not in r["parsed_output"])
+                no_match = sum(1 for r in parsed_results if "[No matching" in r["parsed_output"])
+                errors = sum(1 for r in parsed_results if "[Error" in r["parsed_output"])
+
+                st.markdown("### 📊 Parsing Summary")
+                st.table({
+                    "Total Chunks": total_chunks,
+                    "Successful Parses": successful_parses,
+                    "No Match Found": no_match,
+                    "Errors": errors
+                })
+
+                # Scroll to results
+                st.markdown('<a name="results"></a>', unsafe_allow_html=True)
+                st.markdown("""
+                    <script>
+                        setTimeout(function() {
+                            document.querySelector("a[name='results']").scrollIntoView({ behavior: 'smooth' });
+                        }, 500);
+                    </script>
+                """, unsafe_allow_html=True)
+
+                # 🔍 Display Results with Color Coding
+                st.markdown("### 🔍 Parsed Results")
+                for result in parsed_results:
+                    st.markdown(f"**Source:** {result['source_url']}")
+                    output = result["parsed_output"]
+
+                    if "[Error" in output:
+                        st.error(output)
+                    elif "[No matching" in output:
+                        st.info(output)
+                    else:
+                        st.success(output)
+
             else:
                 st.warning("Please enter a description before parsing.")
-
+    else:
+        st.info("Please scrape a site first in Tab 1 to generate content.")
 
 # Custom Footer
 st.markdown(

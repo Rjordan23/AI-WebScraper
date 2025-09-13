@@ -71,5 +71,16 @@ def clean_body_content(body_content):
     return cleaned_content
 
 # Splits long DOM content into manageable chunks (e.g., for AI parsing)
-def split_dom_content(dom_content, marker="===SECTION BREAK==="):
-    return [chunk.strip() for chunk in dom_content.split(marker) if chunk.strip()]
+def split_dom_content(dom_content, marker="===SECTION BREAK===", max_length=500):
+    # If marker is present, split by it
+    if marker in dom_content:
+        chunks = [chunk.strip() for chunk in dom_content.split(marker) if chunk.strip()]
+    else:
+        # Fallback: split by character length
+        chunks = []
+        while dom_content:
+            chunk = dom_content[:max_length]
+            chunks.append(chunk.strip())
+            dom_content = dom_content[max_length:]
+    return chunks
+
